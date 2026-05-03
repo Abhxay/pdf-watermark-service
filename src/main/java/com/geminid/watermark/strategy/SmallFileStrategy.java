@@ -15,10 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
  * Flow:
  *  1. Load PDF bytes from the uploaded file
  *  2. Add watermark using PDFBox
- *  3. Return the watermarked PDF bytes directly in the HTTP response
- *     (browser triggers a download automatically)
- *
- * No S3 involved — everything happens in memory.
+ *  3. Return the watermarked PDF with Content-Disposition: inline
+ *     so the browser opens it in a new tab instead of downloading
  */
 @Slf4j
 @Component
@@ -35,7 +33,8 @@ public class SmallFileStrategy implements FileProcessingStrategy {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + outputFilename + "\"")
+                // "inline" tells the browser to display the PDF rather than download it
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + outputFilename + "\"")
                 .header("X-Processing-Strategy", "in-memory")
                 .header("X-Watermark-Text", watermarkText)
                 .body(watermarkedBytes);
