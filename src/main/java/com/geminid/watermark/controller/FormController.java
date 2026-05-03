@@ -256,7 +256,7 @@ public class FormController {
     }
 
     @GetMapping(value = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String health() {
-        return "{\\"status\\":\\"ok\\",\\"service\\":\\"pdf-watermark-service\\",\\"stack\\":\\"Java 21 + Spring Boot + Apache PDFBox + MiniStack\\"}";
-    }
+public String health() {
+    return "{\"status\":\"ok\",\"service\":\"pdf-watermark-service\",\"stack\":\"Java 21 + Spring Boot + Apache PDFBox + MiniStack\"}";
+}
 }
