@@ -29,6 +29,8 @@ public class FormController {
                         --accent-bg: #eef0ff;
                         --success: #059669;
                         --success-bg: #ecfdf5;
+                        --error: #dc2626;
+                        --error-bg: #fef2f2;
                         --border: #e8e7f0;
                         --radius: 12px;
                     }
@@ -40,8 +42,7 @@ public class FormController {
                         padding: 24px;
                     }
                     .card {
-                        background: var(--card);
-                        border-radius: 18px; padding: 36px;
+                        background: var(--card); border-radius: 18px; padding: 36px;
                         width: 100%; max-width: 480px;
                         box-shadow: 0 2px 8px rgba(79,70,229,0.07), 0 0 0 1px rgba(79,70,229,0.08);
                     }
@@ -57,35 +58,75 @@ public class FormController {
                     .tag { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); color: var(--ink-soft); background: #fafafa; }
                     .form-group { margin-bottom: 20px; }
                     label { display: block; font-size: 11px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
-                    input[type="text"] { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 14px; color: var(--ink); background: #fff; transition: border-color 0.15s; outline: none; }
+                    input[type="text"] {
+                        width: 100%; padding: 11px 14px;
+                        border: 1.5px solid var(--border); border-radius: var(--radius);
+                        font-size: 14px; color: var(--ink); background: #fff;
+                        transition: border-color 0.15s; outline: none;
+                    }
                     input[type="text"]:focus { border-color: var(--accent); }
                     input[type="text"]::placeholder { color: var(--ink-ghost); }
                     .hint { font-size: 12px; color: var(--ink-ghost); margin-top: 6px; }
-                    .file-zone { border: 1.5px dashed var(--border); border-radius: var(--radius); padding: 28px 16px; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; background: #fafafa; position: relative; }
+                    .file-zone {
+                        border: 1.5px dashed var(--border); border-radius: var(--radius);
+                        padding: 28px 16px; text-align: center; cursor: pointer;
+                        transition: border-color 0.15s, background 0.15s;
+                        background: #fafafa; position: relative;
+                    }
                     .file-zone:hover { border-color: var(--accent); background: var(--accent-bg); }
                     .file-zone.selected { border-style: solid; border-color: var(--accent); background: var(--accent-bg); }
                     .file-zone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-                    .file-icon-wrap { width: 36px; height: 36px; margin: 0 auto 10px; background: var(--border); border-radius: 9px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+                    .file-icon-wrap {
+                        width: 36px; height: 36px; margin: 0 auto 10px;
+                        background: var(--border); border-radius: 9px;
+                        display: flex; align-items: center; justify-content: center;
+                        transition: background 0.15s;
+                    }
                     .file-zone.selected .file-icon-wrap { background: var(--accent); }
                     .file-zone.selected .file-icon-wrap svg { stroke: #fff; }
                     .file-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
                     .file-meta { font-size: 12px; color: var(--ink-soft); }
-                    .btn-primary { width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.15s, transform 0.1s; }
+                    .btn-primary {
+                        width: 100%; padding: 12px; background: var(--accent); color: #fff;
+                        border: none; border-radius: var(--radius);
+                        font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 4px;
+                        display: flex; align-items: center; justify-content: center; gap: 8px;
+                        transition: opacity 0.15s, transform 0.1s;
+                    }
                     .btn-primary:hover { opacity: 0.88; }
                     .btn-primary:active { transform: scale(0.99); }
                     .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
-                    .spinner { width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+                    .spinner {
+                        width: 15px; height: 15px;
+                        border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+                        border-radius: 50%; animation: spin 0.7s linear infinite; display: none;
+                    }
                     @keyframes spin { to { transform: rotate(360deg); } }
                     .progress-wrap { margin-top: 16px; display: none; }
                     .progress-track { height: 3px; background: var(--border); border-radius: 3px; overflow: hidden; }
                     .progress-bar { height: 100%; width: 0%; background: var(--accent); border-radius: 3px; transition: width 0.35s ease; }
                     .progress-label { font-size: 12px; color: var(--ink-soft); margin-top: 8px; text-align: center; }
-                    .success-panel { display: none; border: 1.5px solid #a7f3d0; background: var(--success-bg); border-radius: var(--radius); padding: 24px; text-align: center; margin-top: 16px; }
-                    .success-icon { width: 44px; height: 44px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+                    .success-panel {
+                        display: none; border: 1.5px solid #a7f3d0; background: var(--success-bg);
+                        border-radius: var(--radius); padding: 24px; text-align: center; margin-top: 16px;
+                    }
+                    .success-icon {
+                        width: 44px; height: 44px; background: var(--success); border-radius: 50%;
+                        display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
+                    }
                     .success-title { font-size: 15px; font-weight: 700; color: #065f46; margin-bottom: 4px; }
                     .success-sub { font-size: 13px; color: #047857; margin-bottom: 18px; }
-                    .btn-reset { background: var(--success); color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+                    .btn-reset {
+                        background: var(--success); color: #fff; border: none; border-radius: 8px;
+                        padding: 9px 20px; font-size: 13px; font-weight: 600; cursor: pointer;
+                        transition: opacity 0.15s;
+                    }
                     .btn-reset:hover { opacity: 0.85; }
+                    .error-panel {
+                        display: none; border: 1.5px solid #fca5a5; background: var(--error-bg);
+                        border-radius: var(--radius); padding: 16px; margin-top: 16px;
+                        font-size: 13px; color: var(--error); text-align: center;
+                    }
                     .divider { height: 1px; background: var(--border); margin: 24px 0 16px; }
                     .footer-note { font-size: 11px; color: var(--ink-ghost); text-align: center; }
                 </style>
@@ -104,20 +145,23 @@ public class FormController {
                     <p class="subtitle">Enter your name and upload a PDF. Your name will be stamped diagonally across every page.</p>
 
                     <div class="tags">
-                        <span class="tag">Under 10 MB — opens in browser</span>
+                        <span class="tag">Under 10 MB — opens in new tab</span>
                         <span class="tag">Over 10 MB — S3 link returned</span>
                     </div>
 
-                    <form id="wForm" action="/watermark" method="POST" enctype="multipart/form-data" target="resultFrame">
+                    <form id="wForm">
                         <div class="form-group">
                             <label>Your name</label>
-                            <input type="text" name="name" id="nameInput" placeholder="e.g. Abhay Thakur" maxlength="50" autocomplete="off" oninput="checkReady()"/>
+                            <input type="text" name="name" id="nameInput"
+                                   placeholder="Watermark name"
+                                   maxlength="50" autocomplete="off" oninput="checkReady()"/>
                             <p class="hint">This text appears as a watermark on every page.</p>
                         </div>
                         <div class="form-group">
                             <label>PDF file</label>
                             <div class="file-zone" id="fileZone">
-                                <input type="file" name="pdf" id="pdfInput" accept=".pdf,application/pdf" onchange="fileSelected(this)"/>
+                                <input type="file" name="pdf" id="pdfInput"
+                                       accept=".pdf,application/pdf" onchange="fileSelected(this)"/>
                                 <div class="file-icon-wrap">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="16 16 12 12 8 16"/>
@@ -130,7 +174,7 @@ public class FormController {
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-primary" id="submitBtn" disabled onclick="startProcessing()">
+                        <button type="submit" class="btn-primary" id="submitBtn" disabled>
                             <div class="spinner" id="spinner"></div>
                             <span id="btnText">Add Watermark</span>
                         </button>
@@ -152,11 +196,11 @@ public class FormController {
                         <button class="btn-reset" onclick="resetForm()">Watermark another PDF</button>
                     </div>
 
+                    <div class="error-panel" id="errorPanel"></div>
+
                     <div class="divider"></div>
                     <p class="footer-note">Java 21 · Spring Boot · Apache PDFBox · MiniStack · Docker</p>
                 </div>
-
-                <iframe name="resultFrame" id="resultFrame" style="display:none"></iframe>
 
                 <script>
                     var progressTimer = null;
@@ -174,61 +218,97 @@ public class FormController {
                         document.getElementById('fileZone').classList.add('selected');
                         document.getElementById('fileName').textContent = file.name;
                         var mb = (file.size / 1024 / 1024).toFixed(1);
-                        document.getElementById('fileMeta').textContent = mb + ' MB · ' + (file.size > 10485760 ? 'S3 link will be returned' : 'Will open in browser');
+                        document.getElementById('fileMeta').textContent =
+                            mb + ' MB · ' + (file.size > 10485760 ? 'S3 link will be returned' : 'Will open in new tab');
                         checkReady();
                     }
 
-                    function startProcessing() {
+                    document.getElementById('wForm').addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                        var name = document.getElementById('nameInput').value.trim();
+                        var fileInput = document.getElementById('pdfInput');
+                        var file = fileInput.files[0];
+                        if (!name || !file) return;
+
+                        // UI: start processing
                         clearInterval(progressTimer);
                         progressVal = 0;
-                        var btn    = document.getElementById('submitBtn');
-                        var spinner= document.getElementById('spinner');
-                        var btnTxt = document.getElementById('btnText');
-                        var wrap   = document.getElementById('progressWrap');
-                        var bar    = document.getElementById('progressBar');
-                        var label  = document.getElementById('progressLabel');
-
+                        var btn = document.getElementById('submitBtn');
                         btn.disabled = true;
-                        spinner.style.display = 'block';
-                        btnTxt.textContent = 'Processing...';
-                        wrap.style.display = 'block';
-                        bar.style.width = '0%';
+                        document.getElementById('spinner').style.display = 'block';
+                        document.getElementById('btnText').textContent = 'Processing...';
+                        document.getElementById('progressWrap').style.display = 'block';
+                        document.getElementById('progressBar').style.width = '0%';
+                        document.getElementById('errorPanel').style.display = 'none';
+                        document.getElementById('successPanel').style.display = 'none';
 
                         var msgs = ['Validating PDF...', 'Adding watermark to pages...', 'Almost done...'];
                         var msgIdx = 0;
                         progressTimer = setInterval(function() {
                             progressVal += Math.random() * 12 + 4;
                             if (progressVal > 88) progressVal = 88;
-                            bar.style.width = progressVal + '%';
-                            if (msgIdx < msgs.length) label.textContent = msgs[msgIdx++];
+                            document.getElementById('progressBar').style.width = progressVal + '%';
+                            if (msgIdx < msgs.length) {
+                                document.getElementById('progressLabel').textContent = msgs[msgIdx++];
+                            }
                         }, 700);
 
-                        document.getElementById('resultFrame').onload = function() {
-                            clearInterval(progressTimer);
-                            bar.style.width = '100%';
-                            label.textContent = 'Done!';
+                        // Submit via fetch
+                        var formData = new FormData();
+                        formData.append('name', name);
+                        formData.append('pdf', file);
 
-                            var file = document.getElementById('pdfInput').files[0];
-                            var isLarge = file && file.size > 10485760;
+                        fetch('/watermark', { method: 'POST', body: formData })
+                            .then(function(response) {
+                                clearInterval(progressTimer);
+                                document.getElementById('progressBar').style.width = '100%';
+                                document.getElementById('progressLabel').textContent = 'Done!';
 
-                            setTimeout(function() {
-                                btn.style.display = 'none';
-                                wrap.style.display = 'none';
+                                var contentType = response.headers.get('content-type') || '';
 
-                                if (!isLarge) {
-                                    try {
-                                        var iframeSrc = document.getElementById('resultFrame').contentWindow.location.href;
-                                        if (iframeSrc && iframeSrc !== 'about:blank') {
-                                            window.open(iframeSrc, '_blank');
-                                        }
-                                    } catch(e) {}
-                                    document.getElementById('successSub').textContent = 'Your watermarked PDF opened in a new tab.';
+                                if (contentType.includes('application/pdf')) {
+                                    // Small file — open as blob in new tab
+                                    return response.blob().then(function(blob) {
+                                        var url = URL.createObjectURL(blob);
+                                        window.open(url, '_blank');
+                                        showSuccess('Your watermarked PDF opened in a new tab.');
+                                    });
                                 } else {
-                                    document.getElementById('successSub').textContent = 'Large file processed. Check the S3 download link in the tab.';
+                                    // Large file — parse JSON and open download URL
+                                    return response.json().then(function(data) {
+                                        if (data.downloadUrl) {
+                                            window.open(data.downloadUrl, '_blank');
+                                            showSuccess('Large file processed. Download link opened in a new tab.');
+                                        } else if (data.error) {
+                                            showError(data.error);
+                                        } else {
+                                            showSuccess('Done! Check the new tab.');
+                                        }
+                                    });
                                 }
-                                document.getElementById('successPanel').style.display = 'block';
-                            }, 600);
-                        };
+                            })
+                            .catch(function() {
+                                clearInterval(progressTimer);
+                                showError('Something went wrong. Is Docker running?');
+                            });
+                    });
+
+                    function showSuccess(msg) {
+                        document.getElementById('submitBtn').style.display = 'none';
+                        document.getElementById('progressWrap').style.display = 'none';
+                        document.getElementById('successSub').textContent = msg;
+                        document.getElementById('successPanel').style.display = 'block';
+                    }
+
+                    function showError(msg) {
+                        document.getElementById('progressWrap').style.display = 'none';
+                        document.getElementById('submitBtn').disabled = false;
+                        document.getElementById('spinner').style.display = 'none';
+                        document.getElementById('btnText').textContent = 'Add Watermark';
+                        var panel = document.getElementById('errorPanel');
+                        panel.textContent = msg;
+                        panel.style.display = 'block';
                     }
 
                     function resetForm() {
@@ -244,8 +324,7 @@ public class FormController {
                         document.getElementById('progressBar').style.width = '0%';
                         document.getElementById('progressLabel').textContent = 'Starting...';
                         document.getElementById('successPanel').style.display = 'none';
-                        document.getElementById('resultFrame').src = 'about:blank';
-                        document.getElementById('resultFrame').onload = null;
+                        document.getElementById('errorPanel').style.display = 'none';
                         clearInterval(progressTimer);
                         progressVal = 0;
                     }
@@ -256,7 +335,7 @@ public class FormController {
     }
 
     @GetMapping(value = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
-public String health() {
-    return "{\"status\":\"ok\",\"service\":\"pdf-watermark-service\",\"stack\":\"Java 21 + Spring Boot + Apache PDFBox + MiniStack\"}";
-}
+    public String health() {
+        return "{\"status\":\"ok\",\"service\":\"pdf-watermark-service\",\"stack\":\"Java 21 + Spring Boot + Apache PDFBox + MiniStack\"}";
+    }
 }
