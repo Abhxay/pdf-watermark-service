@@ -91,7 +91,7 @@ public class PdfService {
             cs.setGraphicsStateParameters(gs);
 
             // Grey colour
-            cs.setNonStrokingColor(150, 150, 150);
+            cs.setNonStrokingColor(0.59f, 0.59f, 0.59f);
 
             // Draw text at 45-degree angle
             cs.setFont(font, fontSize);
