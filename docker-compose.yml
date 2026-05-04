@@ -8,19 +8,19 @@ services:
     ports:
       - "8080:8080"
     environment:
-      AWS_ENDPOINT: http://localstack:4566
+      AWS_ENDPOINT: http://ministack:4566
       AWS_REGION: us-east-1
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_KEY: test
       S3_BUCKET: pdf-watermark-bucket
     depends_on:
-      localstack:
+      ministack:
         condition: service_healthy
     restart: on-failure
 
-  localstack:
-    image: localstack/localstack:3.8
-    container_name: pdf-watermark-localstack
+  ministack:
+    image: ministackorg/ministack
+    container_name: pdf-watermark-ministack
     ports:
       - "4566:4566"
     environment:
@@ -28,14 +28,14 @@ services:
       DEFAULT_REGION: us-east-1
       DEBUG: 0
     volumes:
-      - "./localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
-      - localstack-data:/var/lib/localstack
+      - "./ministack/init-aws.sh:/etc/ministack/init/ready.d/init-aws.sh"
+      - ministack-data:/var/lib/ministack
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_ministack/health"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 20s
 
 volumes:
-  localstack-data:
+  ministack-data:
