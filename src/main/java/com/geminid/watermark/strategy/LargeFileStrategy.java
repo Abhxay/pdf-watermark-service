@@ -49,7 +49,8 @@ public class LargeFileStrategy implements FileProcessingStrategy {
         storageService.upload(processedKey, watermarked, "application/pdf");
 
         // 4. Generate signed URL
-        String downloadUrl = storageService.getSignedUrl(processedKey);
+        String downloadUrl = storageService.getSignedUrl(processedKey)
+        .replace("http://ministack:4566", "http://localhost:4566");
 
         log.info("Large file job {} complete. Key: {}", jobId, processedKey);
 
