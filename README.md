@@ -1,4 +1,4 @@
-markdown# PDF Watermark Service
+# PDF Watermark Service
 
 A PDF watermarking microservice built with **Java 21**, **Spring Boot**, **Apache PDFBox**, **MiniStack**, and **Docker**.
 
@@ -31,16 +31,19 @@ Upload any PDF, enter your name, and get it back with your name stamped diagonal
 ---
 
 ## Architecture
+
+```
 Browser
-|
-|-- GET  /           --> FormController      --> HTML upload form
-+-- POST /watermark  --> WatermarkController
-|
-|-- Validate: name + file + magic bytes
-|-- Pick strategy by file size
-|
-|-- Small (< 10MB) --> PdfService --> PDF bytes (opens inline in browser)
-+-- Large (>=10MB) --> StorageService --> MiniStack S3 --> PdfService --> signed URL
+  |
+  |-- GET  /           --> FormController      --> HTML upload form
+  +-- POST /watermark  --> WatermarkController
+                              |
+                              |-- Validate: name + file + magic bytes
+                              |-- Pick strategy by file size
+                              |
+                              |-- Small (< 10MB) --> PdfService --> PDF bytes (opens inline in browser)
+                              +-- Large (>=10MB) --> StorageService --> MiniStack S3 --> PdfService --> signed URL
+```
 
 ### Engineering Patterns
 
@@ -51,6 +54,8 @@ Browser
 ---
 
 ## Project Structure
+
+```
 pdf-watermark-service/
 ├── src/main/java/com/geminid/watermark/
 │   ├── PdfWatermarkApplication.java        ← Spring Boot entry point
@@ -72,6 +77,7 @@ pdf-watermark-service/
 ├── docker-compose.yml                      ← App + MiniStack containers
 ├── pom.xml
 └── README.md
+```
 
 ---
 
@@ -173,10 +179,16 @@ This starts two containers:
 - `pdf-watermark-ministack` — MiniStack (local S3 emulator) on port 4566
 
 The first run takes about 2 minutes while Maven downloads dependencies. Wait for this line:
+
+```
 pdf-watermark-app  | Started PdfWatermarkApplication in X.XXX seconds
+```
 
 ### Step 3 — Open
+
+```
 http://localhost:8080
+```
 
 1. Enter your name
 2. Pick any PDF
