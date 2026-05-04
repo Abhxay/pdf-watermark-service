@@ -49,12 +49,12 @@ public class GlobalExceptionHandler {
                 "The file could not be processed. It may be corrupted or not a valid PDF.", "CORRUPT_PDF");
     }
 
-    /** S3 / LocalStack not reachable */
+    /** S3 / MiniStack not reachable */
     @ExceptionHandler(software.amazon.awssdk.core.exception.SdkClientException.class)
     public ResponseEntity<?> handleAwsException(software.amazon.awssdk.core.exception.SdkClientException ex) {
         log.error("Storage service error: {}", ex.getMessage());
         return error(HttpStatus.SERVICE_UNAVAILABLE,
-                "Storage service is unavailable. Is LocalStack running?", "STORAGE_UNAVAILABLE");
+                "Storage service is unavailable. Is MiniStack running?", "STORAGE_UNAVAILABLE");
     }
 
     /** Catch-all — something unexpected happened */
