@@ -12,8 +12,7 @@ services:
       AWS_SECRET_KEY: test
       S3_BUCKET: pdf-watermark-bucket
     depends_on:
-      ministack:
-        condition: service_healthy
+      - ministack
     restart: on-failure
 
   ministack:
@@ -25,12 +24,6 @@ services:
       SERVICES: s3
     volumes:
       - ministack-data:/var/lib/ministack
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4566/_ministack/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 20s
 
 volumes:
   ministack-data:
