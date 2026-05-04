@@ -21,10 +21,10 @@ import java.time.Duration;
 /**
  * Storage Service — Repository Pattern.
  *
- * All S3 / LocalStack operations go through here.
- * If you swap LocalStack for real AWS tomorrow, only this file changes.
+ * All S3 / MiniStack  operations go through here.
+ * If you swap MiniStack  for real AWS tomorrow, only this file changes.
  *
- * LocalStack is used here as the local alternative to real AWS S3.
+ * MiniStack  is used here as the local alternative to real AWS S3.
  * It runs inside Docker and listens on port 4566.
  * Your code talks to it exactly like real AWS — same SDK, same API.
  */
@@ -56,7 +56,7 @@ public class StorageService {
                 AwsBasicCredentials.create(accessKeyId, secretKey));
 
         S3Configuration s3Config = S3Configuration.builder()
-                .pathStyleAccessEnabled(true) // Required for LocalStack
+                .pathStyleAccessEnabled(true) // Required for MiniStack
                 .build();
 
         s3Client = S3Client.builder()
@@ -77,7 +77,7 @@ public class StorageService {
     }
 
     /**
-     * Uploads a file to S3 (LocalStack).
+     * Uploads a file to S3 (MiniStack ).
      *
      * @param key         S3 object key — the "path" inside the bucket
      * @param data        File bytes
@@ -126,7 +126,7 @@ public class StorageService {
             s3Client.createBucket(CreateBucketRequest.builder().bucket(bucketName).build());
             log.info("S3 bucket '{}' created.", bucketName);
         } catch (Exception e) {
-            log.warn("Could not check bucket at startup (LocalStack may still be starting): {}", e.getMessage());
+            log.warn("Could not check bucket at startup (MiniStack  may still be starting): {}", e.getMessage());
         }
     }
 }

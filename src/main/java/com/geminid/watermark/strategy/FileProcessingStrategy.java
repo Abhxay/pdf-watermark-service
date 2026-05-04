@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * Two implementations:
  *  - SmallFileStrategy: process in memory, return PDF bytes directly
- *  - LargeFileStrategy: upload to S3 (LocalStack), return a signed download URL
+ *  - LargeFileStrategy: upload to S3 (MiniStack ), return a signed download URL
  *
  * The controller picks the right strategy based on file size.
  * If requirements change (e.g. add async queue strategy), just add a new implementation.

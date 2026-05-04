@@ -15,7 +15,7 @@ import java.util.UUID;
  * Strategy for large files (10 MB and above).
  *
  * Flow:
- *  1. Upload original PDF to S3 (LocalStack) for safe-keeping
+ *  1. Upload original PDF to S3 (MiniStack ) for safe-keeping
  *  2. Add watermark using PDFBox
  *  3. Upload watermarked PDF to S3
  *  4. Generate a pre-signed URL (valid 1 hour) so the client can download it

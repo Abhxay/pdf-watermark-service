@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
                 "The file could not be processed. It may be corrupted or not a valid PDF.", "CORRUPT_PDF");
     }
 
-    /** S3 / MiniStack not reachable */
+    /** S3 / MiniStack  not reachable */
     @ExceptionHandler(software.amazon.awssdk.core.exception.SdkClientException.class)
     public ResponseEntity<?> handleAwsException(software.amazon.awssdk.core.exception.SdkClientException ex) {
         log.error("Storage service error: {}", ex.getMessage());
