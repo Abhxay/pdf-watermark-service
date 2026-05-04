@@ -11,8 +11,8 @@ Upload any PDF, enter your name, and get it back with your name stamped diagonal
 | Requirement | Tool Used | Original Suggestion | Why This One? |
 |---|---|---|---|
 | PDF manipulation | **Apache PDFBox 3.x** | pdf-lib.js | pdf-lib.js is JavaScript only. Apache PDFBox is the Java equivalent. Same concept: open PDF, draw text on every page, save it. Apache Foundation maintained. |
-| Local AWS simulation | **MiniStack** | Paid cloud emulators | MiniStack is free, MIT-licensed, runs locally on port 4566, and speaks the same S3 API. No account, no license, no cost. |
-| Language | **Java 21 + Spring Boot** | Node.js | Java is the developer primary language. Code you own is code you can defend. |
+| Local AWS simulation | **MiniStack** | MiniStack | MiniStack is free, MIT-licensed, runs locally on port 4566, and speaks the same S3 API. No account, no license, no cost. |
+| Language | **Java 21 + Spring Boot** | Node.js | -
 | Build | **Maven** | npm | Standard Java build tool. Same role as npm for Node. |
 
 ---
