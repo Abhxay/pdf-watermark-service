@@ -31,7 +31,7 @@ services:
       - "./ministack/init-aws.sh:/etc/ministack/init/ready.d/init-aws.sh"
       - ministack-data:/var/lib/ministack
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4566/_ministack/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:4566"]_ministack/health"]
       interval: 10s
       timeout: 5s
       retries: 10
