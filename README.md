@@ -6,7 +6,7 @@ Upload any PDF, enter your name, and get it back with your name stamped diagonal
 
 ---
 
-## 🤔 Why These Tools? (Alternatives Explained)
+## Why These Tools? 
 
 | Requirement | Tool Used | Original Suggestion | Why This One? |
 |---|---|---|---|
@@ -21,12 +21,12 @@ Upload any PDF, enter your name, and get it back with your name stamped diagonal
 
 | Feature | Detail |
 |---|---|
-| 🔀 Two lambda-style endpoints | GET / serves the upload form · POST /watermark processes the PDF |
-| 🧠 Smart file strategy | Under 10 MB: processed in memory, opens in browser · 10 MB+: stored in MiniStack S3, signed URL returned |
-| 🔄 Reset flow | After each watermark, a success screen appears with a button to watermark another PDF |
-| 🛡️ Graceful error handling | Every error returns structured JSON: `{ success, error, code }` |
-| ✅ PDF validation | Checks magic bytes (%PDF) not just MIME type |
-| 🏗️ Engineering patterns | Strategy, Repository, Middleware |
+|  Two lambda-style endpoints | GET / serves the upload form · POST /watermark processes the PDF |
+|  Smart file strategy | Under 10 MB: processed in memory, opens in browser · 10 MB+: stored in MiniStack S3, signed URL returned |
+|  Reset flow | After each watermark, a success screen appears with a button to watermark another PDF |
+|  Graceful error handling | Every error returns structured JSON: `{ success, error, code }` |
+|  PDF validation | Checks magic bytes (%PDF) not just MIME type |
+|  Engineering patterns | Strategy, Repository, Middleware |
 
 ---
 
@@ -44,6 +44,7 @@ Browser
                               |-- Small (< 10MB) --> PdfService --> PDF bytes (opens inline in browser)
                               +-- Large (>=10MB) --> StorageService --> MiniStack S3 --> PdfService --> signed URL
 ```
+---
 
 ### 🧩 Engineering Patterns
 
@@ -210,11 +211,6 @@ No other code changes needed — all config reads from environment variables wit
 
 ---
 
-## ☁️ Deploying to Real AWS
-
-In `StorageService.java`, remove the `.endpointOverride(...)` line from both the `S3Client` and `S3Presigner` builders. Supply real IAM credentials via environment variables. Everything else is identical — the SDK calls do not change.
-
----
 
 ## 🛠️ Tech Stack
 
