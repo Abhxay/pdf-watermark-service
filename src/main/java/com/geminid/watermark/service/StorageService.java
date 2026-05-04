@@ -18,16 +18,6 @@ import jakarta.annotation.PostConstruct;
 import java.net.URI;
 import java.time.Duration;
 
-/**
- * Storage Service — Repository Pattern.
- *
- * All S3 / MiniStack  operations go through here.
- * If you swap MiniStack  for real AWS tomorrow, only this file changes.
- *
- * MiniStack  is used here as the local alternative to real AWS S3.
- * It runs inside Docker and listens on port 4566.
- * Your code talks to it exactly like real AWS — same SDK, same API.
- */
 @Slf4j
 @Service
 public class StorageService {
@@ -56,7 +46,7 @@ public class StorageService {
                 AwsBasicCredentials.create(accessKeyId, secretKey));
 
         S3Configuration s3Config = S3Configuration.builder()
-                .pathStyleAccessEnabled(true) // Required for MiniStack
+                .pathStyleAccessEnabled(true)
                 .build();
 
         s3Client = S3Client.builder()
@@ -74,15 +64,9 @@ public class StorageService {
                 .build();
 
         ensureBucketExists();
+        configureLifecyclePolicy();
     }
 
-    /**
-     * Uploads a file to S3 (MiniStack ).
-     *
-     * @param key         S3 object key — the "path" inside the bucket
-     * @param data        File bytes
-     * @param contentType MIME type
-     */
     public void upload(String key, byte[] data, String contentType) {
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -94,16 +78,6 @@ public class StorageService {
         log.info("Uploaded to s3://{}/{}", bucketName, key);
     }
 
-    /**
-     * Generates a pre-signed URL for downloading a file from S3.
-     * The URL is valid for 1 hour — after that it stops working.
-     *
-     * Pre-signed URL = a temporary access ticket.
-     * The client can download directly from S3 without going through our server.
-     *
-     * @param key S3 object key
-     * @return    Pre-signed HTTPS URL
-     */
     public String getSignedUrl(String key) {
         GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
                 .signatureDuration(Duration.ofHours(1))
@@ -114,11 +88,19 @@ public class StorageService {
         return presignedRequest.url().toString();
     }
 
-    /**
-     * Creates the S3 bucket if it doesn't already exist.
-     * Called once when the service starts up.
-     */
-    private void ensureBucketExists() {
+    public boolean objectExists(String key) {
+        try {
+            s3Client.headObject(HeadObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build());
+            return true;
+        } catch (NoSuchKeyException e) {
+            return false;
+        }
+    }
+
+    void ensureBucketExists() {
         try {
             s3Client.headBucket(HeadBucketRequest.builder().bucket(bucketName).build());
             log.info("S3 bucket '{}' already exists.", bucketName);
@@ -126,7 +108,36 @@ public class StorageService {
             s3Client.createBucket(CreateBucketRequest.builder().bucket(bucketName).build());
             log.info("S3 bucket '{}' created.", bucketName);
         } catch (Exception e) {
-            log.warn("Could not check bucket at startup (MiniStack  may still be starting): {}", e.getMessage());
+            log.warn("Could not check bucket at startup: {}", e.getMessage());
+        }
+    }
+
+    private void configureLifecyclePolicy() {
+        LifecycleRule uploadsCleanup = LifecycleRule.builder()
+                .id("auto-delete-uploads-1d")
+                .filter(LifecycleRuleFilter.builder().prefix("uploads/").build())
+                .expiration(LifecycleExpiration.builder().days(1).build())
+                .status(ExpirationStatus.ENABLED)
+                .build();
+
+        LifecycleRule processedCleanup = LifecycleRule.builder()
+                .id("auto-delete-processed-7d")
+                .filter(LifecycleRuleFilter.builder().prefix("processed/").build())
+                .expiration(LifecycleExpiration.builder().days(7).build())
+                .status(ExpirationStatus.ENABLED)
+                .build();
+
+        try {
+            s3Client.putBucketLifecycleConfiguration(
+                    PutBucketLifecycleConfigurationRequest.builder()
+                            .bucket(bucketName)
+                            .lifecycleConfiguration(BucketLifecycleConfiguration.builder()
+                                    .rules(uploadsCleanup, processedCleanup)
+                                    .build())
+                            .build());
+            log.info("Lifecycle policy configured: uploads=1d, processed=7d");
+        } catch (Exception e) {
+            log.warn("Could not configure lifecycle policy: {}", e.getMessage());
         }
     }
 }
